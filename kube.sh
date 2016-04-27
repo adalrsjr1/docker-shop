@@ -19,10 +19,11 @@ run () {
 
 	echo -e  "\nRunning MICROSERVICE Frontend...\n"
 	$KUBECTL run frontend --image=adalrsjr1/frontend --port=8110
-	$KUBECTL expose deployment frontend --type="LoadBalancer"
+	# must set the static ip to --external-ip
+	$KUBECTL expose deployment frontend --type="LoadBalancer" --external-ip=192.168.201.254
 
-	# echo -e "\nWaiting...\n"
-	# sleep 10s
+	echo -e "\nWaiting...\n"
+	sleep 10s
 
 	# echo -e "\nTesting DNS -- Products calling Profiles\n"
 	# $KUBECTL exec $($KUBECTL get pods | grep -i products | awk -F" " '{print $1}') -- curl -i -X GET profiles.default.svc.cluster.local:8090/profiles/public/users/
