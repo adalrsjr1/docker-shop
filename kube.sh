@@ -13,6 +13,14 @@ run () {
 	$KUBECTL run profiles --image=adalrsjr1/profiles --port=8090
 	$KUBECTL expose deployment profiles --type="LoadBalancer"
 
+	echo -e  "\nRunning MICROSERVICE Match...\n"
+	$KUBECTL run match --image=adalrsjr1/match --port=8100
+	$KUBECTL expose deployment match --type="LoadBalancer"
+
+	echo -e  "\nRunning MICROSERVICE Frontend...\n"
+	$KUBECTL run frontend --image=adalrsjr1/frontend --port=8110
+	$KUBECTL expose deployment frontend --type="LoadBalancer"
+
 	echo -e "\nWaiting...\n"
 	sleep 10s
 

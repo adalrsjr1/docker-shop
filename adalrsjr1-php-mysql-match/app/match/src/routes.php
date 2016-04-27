@@ -5,8 +5,8 @@ $app->get('/login', function ($request, $response, $args) {
 	$PROUCTS = "products.default.svc.cluster.local:8080/products/public/query?";
 	$PROFILES = "profiles.default.svc.cluster.local:8090/products/public/user/";
 	if(gethostname() == 'linux-vm') {
-		$PRODUCTS = "http://localhost:8080/products/public/query?";
-		$PROFILES = "http://localhost:8090/profiles/public/user/";
+		$PRODUCTS = "http://localhost/products/products/public/query?";
+		$PROFILES = "http://localhost/profile/profiles/public/user/";
 	}
 	
 	$query_input = $request->getUri()->getQuery();

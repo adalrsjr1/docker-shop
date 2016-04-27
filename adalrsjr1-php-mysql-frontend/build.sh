@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build --rm -t adalrsjr1/products . 
+docker build --rm -t adalrsjr1/frontend . 

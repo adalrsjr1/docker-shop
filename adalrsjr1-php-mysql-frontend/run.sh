@@ -7,7 +7,7 @@ fi
 
 
 if [ "$3" -eq 0 ]; then
-	docker run -it --rm --name $1 -p $2:8080 -v /data/mysql/$4:/data adalrsjr1/products
+	docker run -it --rm --name $1 -p $2:8110 -v /data/mysql/$4:/data adalrsjr1/frontend
 else 
-	docker run -it --rm --name $1 -p $2:8080 -p $3:3306 -v /data/mysql/$4:/data adalrsjr1/products
+	docker run -it --rm --name $1 -p $2:8110 -p $3:3306 -v /data/mysql/$4:/data adalrsjr1/frontend
 fi
