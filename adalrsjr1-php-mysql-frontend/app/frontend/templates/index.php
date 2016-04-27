@@ -27,13 +27,8 @@
     <body>
         <h1>Profile Macth</h1>
         <div>match your profile with our products</div>
-			<?php 
-			$URL = 'match.default.svc.cluster.local:8100/match/public/login';
-			if(gethostname() == 'linux-vm') {
-				$URL = 'http://localhost/match/match/public/login';
-			}
-			?>
-			<form action=<?php echo $URL; ?> method="get">
+			
+			<form action="./products" method="get">
 				User: <input type="text" name="user">
 				<input type="submit" value="login">
 			</form>

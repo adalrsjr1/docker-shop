@@ -31,6 +31,7 @@ run () {
 	$KUBECTL exec $($KUBECTL get pods | grep -i profiles | awk -F" " '{print $1}') -- curl -i -X GET products.default.svc.cluster.local:8080/products/public/products/
 
 	echo -e "\nALL OK...\n"
+	$KUBECTL get services
 }
 
 tear_down () {

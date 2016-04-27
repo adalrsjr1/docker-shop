@@ -1,15 +1,15 @@
 <?php
 // Routes
 
-$app->get('/login', function ($request, $response, $args) {
+$app->get('/login/{user}', function ($request, $response, $args) {
 	$PROUCTS = "products.default.svc.cluster.local:8080/products/public/query?";
 	$PROFILES = "profiles.default.svc.cluster.local:8090/products/public/user/";
 	if(gethostname() == 'linux-vm') {
-		$PRODUCTS = "http://localhost:8080/products/public/query?";
-		$PROFILES = "http://localhost:8090/profiles/public/user/";
+		$PRODUCTS = "http://localhost/products/products/public/query?";
+		$PROFILES = "http://localhost/profile/profiles/public/user/";
 	}
 	
-	$query_input = $request->getUri()->getQuery();
+	/*$query_input = $request->getUri()->getQuery();
 	$args = explode("&",$query_input);
 	$size = count($args);
 	
@@ -23,6 +23,8 @@ $app->get('/login', function ($request, $response, $args) {
 	if(isset($map['user'])) {
 		$user = $map['user'];
 	}
+	*/
+	$user = $args['user'];
 	
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, $PROFILES.$user);
@@ -54,8 +56,8 @@ $app->get('/login', function ($request, $response, $args) {
 	$products = curl_exec($curl);
 	curl_close($curl);
 		
-	//return $response->write($products)
-    // 	            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+	return $response->write($products)
+     	            ->withHeader('Content-Type', 'application/json;charset=utf-8');
 	
 });
 
