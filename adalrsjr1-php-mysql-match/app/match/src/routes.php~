@@ -1,7 +1,7 @@
 <?php
 // Routes
 
-$app->get('/login/{user}', function ($request, $response, $args) {
+$app->get('/login', function ($request, $response, $args) {
 	$PROUCTS = "products.default.svc.cluster.local:8080/products/public/query?";
 	$PROFILES = "profiles.default.svc.cluster.local:8090/products/public/user/";
 	if(gethostname() == 'linux-vm') {
@@ -9,13 +9,36 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 		$PROFILES = "http://localhost:8090/profiles/public/user/";
 	}
 	
+	$query_input = $request->getUri()->getQuery();
+	$args = explode("&",$query_input);
+	$size = count($args);
+	
+	$map = [];
+	foreach($args as $arg) {
+		$kv = explode("=",$arg);
+		$map[$kv[0]] = $kv[1];		
+	}
+	
+	$user = "";
+	if(isset($map['user'])) {
+		$user = $map['user'];
+	}
+	
 	$curl = curl_init();
-	curl_setopt($curl, CURLOPT_URL, $PROFILES.$args['user']);
+	curl_setopt($curl, CURLOPT_URL, $PROFILES.$user);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	$profile = curl_exec($curl);
 	curl_close($curl);
 	
 	$profile = json_decode($profile,true);
+	
+	if(count($profile) == 0) {
+		return $response
+				->withStatus(404)
+				->withHeader('Content-Type', 'application/json;charset=utf-8')
+				->write('User not found');
+	}
+	
 	$profile = array_pop($profile);
 	$profile = array_pop($profile);
 	
@@ -30,11 +53,9 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	$products = curl_exec($curl);
 	curl_close($curl);
-	
-	echo gethostname();	
 		
-	return $response->write($products)
-     	            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+	//return $response->write($products)
+    // 	            ->withHeader('Content-Type', 'application/json;charset=utf-8');
 	
 });
 
