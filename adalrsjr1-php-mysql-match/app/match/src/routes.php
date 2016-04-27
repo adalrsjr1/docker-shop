@@ -2,8 +2,8 @@
 // Routes
 
 $app->get('/login/{user}', function ($request, $response, $args) {
-	$PROUCTS = "products.default.svc.cluster.local:8080/products/public/query?";
-	$PROFILES = "profiles.default.svc.cluster.local:8090/products/public/user/";
+	$PRODUCTS = "products.default.svc.cluster.local:8080/products/public/query?";
+	$PROFILES = "profiles.default.svc.cluster.local:8090/profiles/public/user/";
 	if(gethostname() == 'linux-vm') {
 		$PRODUCTS = "http://localhost/products/products/public/query?";
 		$PROFILES = "http://localhost/profile/profiles/public/user/";

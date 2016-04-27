@@ -21,23 +21,21 @@ run () {
 	$KUBECTL run frontend --image=adalrsjr1/frontend --port=8110
 	$KUBECTL expose deployment frontend --type="LoadBalancer"
 
-	echo -e "\nWaiting...\n"
-	sleep 10s
+	# echo -e "\nWaiting...\n"
+	# sleep 10s
 
-	echo -e "\nTesting DNS -- Products calling Profiles\n"
-	$KUBECTL exec $($KUBECTL get pods | grep -i products | awk -F" " '{print $1}') -- curl -i -X GET profiles.default.svc.cluster.local:8090/profiles/public/users/
+	# echo -e "\nTesting DNS -- Products calling Profiles\n"
+	# $KUBECTL exec $($KUBECTL get pods | grep -i products | awk -F" " '{print $1}') -- curl -i -X GET profiles.default.svc.cluster.local:8090/profiles/public/users/
 	
-	echo -e "\nTesting DNS -- Profiles calling Products\n"
-	$KUBECTL exec $($KUBECTL get pods | grep -i profiles | awk -F" " '{print $1}') -- curl -i -X GET products.default.svc.cluster.local:8080/products/public/products/
-
 	echo -e "\nALL OK...\n"
 	$KUBECTL get services
 }
 
 tear_down () {
 	echo -e "Removing MICROSERVICES...\n"
-	$KUBECTL delete deployments products profiles
-	$KUBECTL delete services products profiles
+	$KUBECTL delete deployments products profiles match frontend
+	$KUBECTL delete services products profiles match frontend
+
 }
 
 clean () {
