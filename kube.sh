@@ -14,7 +14,7 @@ run () {
 	$KUBECTL expose deployment profiles --type="LoadBalancer"
 
 	echo -e "\nWaiting...\n"
-	sleep 30s
+	sleep 10s
 
 	echo -e "\nTesting DNS -- Products calling Profiles\n"
 	$KUBECTL exec $($KUBECTL get pods | grep -i products | awk -F" " '{print $1}') -- curl -i -X GET profiles.default.svc.cluster.local:8090/profiles/public/users/
