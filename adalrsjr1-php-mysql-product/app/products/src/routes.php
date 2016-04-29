@@ -24,13 +24,24 @@ $db ='[{"calcado":{"preco":29,"tamanho":38,"cor":"cinza","tipo":"pantufa","marca
 {"roupa":{"preco":138,"tamanho":"Grande","cor":"azul","tipo":"kussaquianas","descricao":"Trama de algodão, clara e semitransparente. Pode ser feita com crochê de fibras naturais ou sintéticas. Mantém o ar dentro da roupa, refrigerando no verão e aquecendo durante o inverno."}},
 {"roupa":{"preco":179,"tamanho":"Pequeno","cor":"carmesim","tipo":"sarouel","descricao":"Tecido de algodão, forte, originário da cidade de Némes. Apresenta ligamento em sarja. O tecido com este tipo de ligamento é, frequentemente, mais firme do que os que apresentam ligamento em tela, tendo menos tendência a sujar, apesar de ser de lavagem mais difécil. é semelhante ao coutil, jeans e denim. É prático e resistente."}},
 {"roupa":{"preco":63,"tamanho":"ExtraGrande","cor":"bordô","tipo":"casaco","descricao":"Tecido de algodão ou de composição mista, caracterizado pelo aspecto enrugado, obtido pelo pré-encolhimento dos fios, seja do urdume ou da trama. Seu nome de origem é seersucker."}}]';
-/*
-$app->get('/hello/[{name}]', function ($request, $response, $args) {
-    // Sample log message
-    $this->logger->info("Slim-Skeleton '/' route");
 
-    // Render index view
-    return $this->renderer->render($response, 'index.phtml', $args);
+// this middleware is for intercept and log
+/*$app->add(function ($request, $response, $next) {
+	$timestamp = time();
+	$host = $request->getUri()->getHost();
+	$base_path = $request->getUri()->getBasePath();
+	$path = $request->getUri()->getPath();
+	$port = $request->getUri()->getPort();
+	$status = $response->getStatusCode();
+	
+	$log = $timestamp.' ['.$status.'] '.$host.':'.$port.$base_path.$path;
+	
+	$response->getBody()->write($log);
+	$response = $next($request, $response);
+	
+	
+
+	return $response;
 });*/
 
 $app->get('/products/[{product}]', function ($request, $response, $args) use($db) {
