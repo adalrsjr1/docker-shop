@@ -29,7 +29,7 @@ $db ='[{"calcado":{"preco":29,"tamanho":38,"cor":"cinza","tipo":"pantufa","marca
 /*$app->add(function ($request, $response, $next) {
 	$timestamp = time();
 	$host = $request->getUri()->getHost();
-	$base_path = $request->getUri()->getBasePath();
+	$base_path = $request->getUri()->getBasePath();()
 	$path = $request->getUri()->getPath();
 	$port = $request->getUri()->getPort();
 	$status = $response->getStatusCode();
