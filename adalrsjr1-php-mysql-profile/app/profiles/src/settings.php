@@ -10,8 +10,9 @@ return [
 
         // Monolog settings
         'logger' => [
-            'name' => 'slim-app',
-            'path' => __DIR__ . '/../logs/app.log',
+            'name' => 'profilesmanager-service',
+            //'path' => __DIR__ . '/../logs/app.log',
+            'path' => '/usr/local/home/docker-imgs/alpine-php-mysql-shop/app-log/app.log',
         ],
     
     ],

@@ -7,10 +7,14 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	if(gethostname() == 'linux-vm') {
 		$PRODUCTS = "http://localhost/products/products/public/query?";
 		$PROFILES = "http://localhost/profile/profiles/public/user/";
+		$this->logger->addInfo("deployed at localhost");
+	}
+	else {
+		$this->logger->addInfo("deployed at kubernetes");
 	}
 	
 	$user = $args['user'];
-	
+	$this->logger->addInfo("selecting profile from ".$user);
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, $PROFILES.$user);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -39,6 +43,7 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	
 	$query = "product=$product&color=$color&price=$price";
 		
+	$this->logger->addInfo("matching with products");
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, $PRODUCTS.$query);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);

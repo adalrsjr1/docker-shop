@@ -37,8 +37,15 @@ $app->get('/hello/[{name}]', function ($request, $response, $args) {
 });*/
 
 $app->get('/users/', function ($request, $response, $args) use($db) {
+	if(gethostname() == 'linux-vm') {
+		$this->logger->addInfo("deployed at localhost");
+	}
+	else {
+		$this->logger->addInfo("deployed at kubernetes");
+	}
 	$users = json_decode($db);
 	
+	$this->logger->addInfo("getting all profiles");
 	$selected = [];
 	foreach($users as $user) {
 		array_push($selected, $user);
@@ -49,9 +56,17 @@ $app->get('/users/', function ($request, $response, $args) use($db) {
 });
 
 $app->get('/user/{user}', function ($request, $response, $args) use($db) {
+	if(gethostname() == 'linux-vm') {
+		$this->logger->addInfo("deployed at localhost");
+	}
+	else {
+		$this->logger->addInfo("deployed at kubernetes");
+	}
 	$users = json_decode($db, true);
 	
 	$selected = [];
+	
+	$this->logger->addInfo("filtering profile from ".$args['user']);
 	foreach($users as $user) {
 		$aux = NULL;
 

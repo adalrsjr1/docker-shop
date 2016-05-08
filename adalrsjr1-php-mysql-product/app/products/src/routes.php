@@ -45,17 +45,30 @@ $db ='[{"calcado":{"preco":29,"tamanho":38,"cor":"cinza","tipo":"pantufa","marca
 });*/
 
 $app->get('/products/[{product}]', function ($request, $response, $args) use($db) {
+	if(gethostname() == 'linux-vm') {
+		$this->logger->addInfo("deployed at localhost");
+	}
+	else {
+		$this->logger->addInfo("deployed at kubernetes");
+	}
+
 	$products = json_decode($db);
 	
 	$selected = [];
 	foreach($products as $product) {
 		$aux = NULL;
-		if(!isset($args['product']) )
+		if(!isset($args['product']) ) {
+			$this->logger->addInfo("getting all products");
 			$aux = $product;
-		else if(isset($product->roupa) && $args['product'] == "roupa")
+		}
+		else if(isset($product->roupa) && $args['product'] == "roupa") {
+			$this->logger->addInfo("filtering products by clothes");
 			$aux = $product->roupa;
-		else if(isset($product->calcado) && $args['product'] == "calcado") 
+		}
+		else if(isset($product->calcado) && $args['product'] == "calcado") {
+			$this->logger->addInfo("filtering products by shoes");
 			$aux = $product->calcado;
+		}
 			
 		if(isset($aux)) {
 			array_push($selected, $product);
@@ -67,6 +80,13 @@ $app->get('/products/[{product}]', function ($request, $response, $args) use($db
 });
 
 $app->get('/color/{color}', function ($request, $response, $args) use($db) {
+	if(gethostname() == 'linux-vm') {
+		$this->logger->addInfo("deployed at localhost");
+	}
+	else {
+		$this->logger->addInfo("deployed at kubernetes");
+	}
+
 	$products = json_decode($db);
 	
 	$selected = [];
@@ -78,6 +98,7 @@ $app->get('/color/{color}', function ($request, $response, $args) use($db) {
 			$aux = $product->calcado;
 			
 		if($aux->cor == $args['color']) {
+			$this->logger->addInfo("filtering products by color-".$args['color']);
 			array_push($selected, $product);
 		}
 	}
@@ -87,6 +108,12 @@ $app->get('/color/{color}', function ($request, $response, $args) use($db) {
 });
 
 $app->get('/price/{price}', function ($request, $response, $args) use($db) {
+	if(gethostname() == 'linux-vm') {
+		$this->logger->addInfo("deployed at localhost");
+	}
+	else {
+		$this->logger->addInfo("deployed at kubernetes");
+	}
 	$price = explode("-",$args['price']);
 
 	$products = json_decode($db);
@@ -100,6 +127,7 @@ $app->get('/price/{price}', function ($request, $response, $args) use($db) {
 			$aux = $product->calcado;
 			
 		if($aux->preco >= $price[0] && $aux->preco <= $price[1]) {
+			$this->logger->addInfo("filtering products with ".$price[0]." <= price <= ".$price[1]);
 			array_push($selected, $product);
 		}
 	}
@@ -109,7 +137,15 @@ $app->get('/price/{price}', function ($request, $response, $args) use($db) {
 });
 
 $app->get('/query', function($request, $response, $args) use($db) {
+	if(gethostname() == 'linux-vm') {
+		$this->logger->addInfo("deployed at localhost");
+	}
+	else {
+		$this->logger->addInfo("deployed at kubernetes");
+	}
+	
 	$query = $request->getUri()->getQuery();
+	$this->logger->addInfo("filtering products by query-".$query);
 	$args = explode("&",$query);
 	$size = count($args);
 
@@ -126,12 +162,15 @@ $app->get('/query', function($request, $response, $args) use($db) {
 	foreach($products as $product) {
 		if(isset($map['product'])) {
 			if($map['product'] == 'roupa' && isset($product->roupa)) {
+				$this->logger->addInfo("filtering by clothes");
 				$aux = $product->roupa;
 			}
 			else if($map['product'] == 'calcado' && isset($product->calcado)) {
+				$this->logger->addInfo("filtering by shoes");
 				$aux = $product->calcado;
 			}
 			else if($map['product'] != 'calcado' && $map['product'] != 'roupa') {
+				$this->logger->addInfo("unavailable product");
 				return $response
 							->withStatus(404)
 							->withHeader('Content-Type', 'application/json;charset=utf-8')
@@ -145,7 +184,8 @@ $app->get('/query', function($request, $response, $args) use($db) {
 						
 			if( (isset($aux) && isset($map['color']) && $map['color'] == $aux->cor) &&
 				(isset($aux) && isset($map['price']) && $aux->preco >= $price[0] && $aux->preco <= $price[1])) {
-
+				$this->logger->addInfo("filtering products by color-".$aux->cor);
+				$this->logger->addInfo("filtering products with ".$price[0]." <= price <= ".$price[1]);
 				array_push($selected, $product);
 			}
 		}
