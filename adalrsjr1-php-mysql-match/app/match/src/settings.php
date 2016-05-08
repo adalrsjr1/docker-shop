@@ -11,8 +11,8 @@ return [
         // Monolog settings
         'logger' => [
             'name' => 'match-service',
-            //'path' => __DIR__ . '/../logs/app.log',
-            'path' => '/usr/local/home/docker-imgs/alpine-php-mysql-shop/app-log/app.log',
+            'path' => __DIR__ . '/../logs/app.log',
+            //'path' => '/usr/local/home/docker-imgs/alpine-php-mysql-shop/app-log/app.log',
         ],
     
     ],

@@ -10,9 +10,9 @@ return [
 
         // Monolog settings
         'logger' => [
-            'name' => 'producsmanager-service',
-            //'path' => __DIR__ . '/../logs/app.log',
-            'path' => '/usr/local/home/docker-imgs/alpine-php-mysql-shop/app-log/app.log',
+            'name' => 'productsmanager-service',
+            'path' => __DIR__ . '/../logs/app.log',
+            //'path' => '/usr/local/home/docker-imgs/alpine-php-mysql-shop/app-log/app.log',
         ],
     
     ],

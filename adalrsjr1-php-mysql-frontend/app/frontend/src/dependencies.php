@@ -16,6 +16,13 @@ $container['logger'] = function ($c) {
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
     $logger->pushProcessor(new Monolog\Processor\WebProcessor());
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], Monolog\Logger::DEBUG));
+    
+    if (gethostname() == 'linux-vm') {
+		$handler = new Monolog\Handler\SocketHandler('udp://localhost:9999');
+		$handler->setPersistent(true);
+		$logger->pushHandler($handler, Monolog\Logger::DEBUG);
+    }
+    
     return $logger;
 };
 
