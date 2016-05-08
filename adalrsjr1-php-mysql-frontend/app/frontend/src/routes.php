@@ -29,11 +29,16 @@ $app->get('/products', function($request, $response, $args) {
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, $URL.$user);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
 	$products = curl_exec($curl);
+	$http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
 	curl_close($curl);
 	
 	return $response->write($products)
-     	            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+					->withHeader('Content-Type', 'application/json;charset=utf-8')
+					->withStatus($http_status);
+
 	
 });
 

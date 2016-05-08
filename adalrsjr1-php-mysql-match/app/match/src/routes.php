@@ -15,13 +15,17 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	curl_setopt($curl, CURLOPT_URL, $PROFILES.$user);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	$profile = curl_exec($curl);
+	$http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 	curl_close($curl);
 	
 	$profile = json_decode($profile,true);
 	
 	if(count($profile) == 0) {
+		if($http_status == 200) {
+			$http_status = 404;
+		}
 		return $response
-				->withStatus(404)
+				->withStatus($http_status)
 				->withHeader('Content-Type', 'application/json;charset=utf-8')
 				->write('User not found');
 	}
@@ -39,9 +43,13 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	curl_setopt($curl, CURLOPT_URL, $PRODUCTS.$query);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	$products = curl_exec($curl);
+
+	$http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
 	curl_close($curl);
 		
 	return $response->write($products)
+		            ->withStatus($http_status)
      	            ->withHeader('Content-Type', 'application/json;charset=utf-8');
 	
 });
