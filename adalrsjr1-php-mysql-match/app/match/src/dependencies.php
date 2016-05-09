@@ -17,11 +17,14 @@ $container['logger'] = function ($c) {
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], Monolog\Logger::DEBUG));
     
-    if (gethostname() == 'linux-vm') {
-		$handler = new Monolog\Handler\SocketHandler('udp://localhost:9999');
-		$handler->setPersistent(true);
-		$logger->pushHandler($handler, Monolog\Logger::DEBUG);
+    /*if (gethostname() == 'linux-vm') {
+		$handler = new Monolog\Handler\SocketHandler('tcp://localhost:9999');
+		
+    }else {
+    	$handler = new Monolog\Handler\SocketHandler('tcp://172.17.0.1:9999');
     }
+    $handler->setPersistent(true);
+	$logger->pushHandler($handler, Monolog\Logger::DEBUG);*/
     
     return $logger;
 };
