@@ -18,7 +18,7 @@ $container['logger'] = function ($c) {
     
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], Monolog\Logger::DEBUG));
     
-    if (gethostname() == 'linux-vm') {
+    /*if (gethostname() == 'linux-vm') {
 		$handler = new Monolog\Handler\SocketHandler('udp://localhost:9999');
 		
     }else {
@@ -27,7 +27,7 @@ $container['logger'] = function ($c) {
     $formatter = new Monolog\Formatter\LineFormatter(null, "Uu"); // "U" Universal timestamp
     $handler->setFormatter($formatter);
     $handler->setPersistent(true);
-	$logger->pushHandler($handler, Monolog\Logger::DEBUG);
+	$logger->pushHandler($handler, Monolog\Logger::DEBUG);*/
     
     return $logger;
 };
