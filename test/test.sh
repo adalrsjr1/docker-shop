@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# http://stackoverflow.com/questions/15060762/httperf-command-options
+
+evaluate() {
+	val=$(( $1 * 60 ))
+	httperf --hog --server 192.168.201.254 --port 8110 --uri /frontend/public/products?user=Usuario5 --rate $1 --num-conn $val  --num-call 1 --timeout 5
+}
+
 run() {
 	for ((i=1; i<=$1; i++));do
 		# curl -i -X GET "10.0.0.35:8100/match/public/login/Usuario$(echo $(($RANDOM % 10 + 1)) )";
@@ -12,4 +19,6 @@ run() {
 
 if [ $1 = "run"  ]; then
 	run $2
+elif [ $1 = "evaluate" ]; then
+	evaluate $2
 fi
