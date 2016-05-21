@@ -17,8 +17,17 @@ run() {
 	done
 }
 
-if [ $1 = "run"  ]; then
+usage() {
+	echo "./test.sh run <number_requests>"
+	echo "./test.sh evaluate <rate_of_requests>"
+}
+
+if [ $# -ne 2  ]; then
+	usage
+elif [ $1 = "run"  ]; then
 	run $2
 elif [ $1 = "evaluate" ]; then
 	evaluate $2
+else
+	usage
 fi
