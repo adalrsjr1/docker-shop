@@ -45,3 +45,10 @@
   flush_interval 0s
   bulk_send false
 </match>
+
+<source>
+  type zmq_sub
+  publisher tcp://127.0.0.1:5557
+  bulk_send false
+  subkey zmq.,zmq2
+</source>
