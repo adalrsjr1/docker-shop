@@ -23,6 +23,7 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, $PROFILES.$user);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Unique-Id',md5(uniqid($PROFILES.$user.rand(),true))));
 	$profile = curl_exec($curl);
 	$http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 	curl_close($curl);
