@@ -4,12 +4,10 @@
 $app->get('/', function($request, $response, $args) {
 	$uniqueId = '';
 	if ($request->hasHeader('X-Unique-Id')) {
-			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+			$uniqueId = $request->getHeaderLine('X-Unique-Id');
 	}
 	
-	if(isset($uniqueId) && !empty($uniqueId)) {
-		$response->withHeader('X-Unique-Id',$uniqueid);
-	}
+	$response->withHeader('X-Unique-Id',$uniqueId);
 
 	return $this->renderer->render($response, 'index.php', $args);
 });
@@ -18,7 +16,7 @@ $app->get('/products', function($request, $response, $args) {
 
 	$uniqueId = '';
 	if ($request->hasHeader('X-Unique-Id')) {
-			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+			$uniqueId = $request->getHeaderLine('X-Unique-Id');
 	}
 
 	$URL = 'match.default.svc.cluster.local:8100/match/public/login/';
@@ -49,7 +47,7 @@ $app->get('/products', function($request, $response, $args) {
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, $URL.$user);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Unique-Id',md5(uniqid($URL.rand(),true))));
+	curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Unique-Id:'.md5(uniqid($URL.rand(),true))));
 
 
 	$products = curl_exec($curl);
@@ -58,12 +56,10 @@ $app->get('/products', function($request, $response, $args) {
 	curl_close($curl);
 	$this->logger->addInfo("printing response from $user");
 	
-	if(isset($uniqueId) && !empty($uniqueId)) {
-		$response->withHeader('X-Unique-Id',$uniqueid);
-	}
 	
 	return $response->write($products)
 					->withHeader('Content-Type', 'application/json;charset=utf-8')
+					->withHeader('X-Unique-Id',$uniqueId)
 					->withStatus($http_status);
 
 	

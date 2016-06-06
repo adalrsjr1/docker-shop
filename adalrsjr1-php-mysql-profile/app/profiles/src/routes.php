@@ -39,7 +39,7 @@ $app->get('/hello/[{name}]', function ($request, $response, $args) {
 $app->get('/users/', function ($request, $response, $args) use($db) {
 	$uniqueId = '';
 	if ($request->hasHeader('X-Unique-Id')) {
-			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+			$uniqueId = $request->getHeaderLine('X-Unique-Id');
 	}
 	if(gethostname() == 'linux-vm') {
 		$this->logger->addInfo("deployed at localhost");
@@ -55,18 +55,16 @@ $app->get('/users/', function ($request, $response, $args) use($db) {
 		array_push($selected, $user);
 	}
 	
-	if(isset($uniqueId) && !empty($uniqueId)) {
-		$response->withHeader('X-Unique-Id',$uniqueid);
-	}
 	
 	return $response->write(json_encode($selected))
+				    ->withHeader('X-Unique-Id',$uniqueId)
      	               ->withHeader('Content-Type', 'application/json;charset=utf-8');	
 });
 
 $app->get('/user/{user}', function ($request, $response, $args) use($db) {
 	$uniqueId = '';
 	if ($request->hasHeader('X-Unique-Id')) {
-			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+			$uniqueId = $request->getHeaderLine('X-Unique-Id');
 	}
 	if(gethostname() == 'linux-vm') {
 		$this->logger->addInfo("deployed at localhost");
@@ -89,12 +87,9 @@ $app->get('/user/{user}', function ($request, $response, $args) use($db) {
 			array_push($selected, $user);
 		}
 	}
-	
-	if(isset($uniqueId) && !empty($uniqueId)) {
-		$response->withHeader('X-Unique-Id',$uniqueid);
-	}
-	
+		
 	return $response->write(json_encode($selected))
+					->withHeader('X-Unique-Id',$uniqueId)
      	               ->withHeader('Content-Type', 'application/json;charset=utf-8');	
 });
 

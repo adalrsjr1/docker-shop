@@ -4,7 +4,7 @@
 $app->get('/login/{user}', function ($request, $response, $args) {
 	$uniqueId = '';
 	if ($request->hasHeader('X-Unique-Id')) {
-			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+			$uniqueId = $request->getHeaderLine('X-Unique-Id');
 	}
 
 	$PRODUCTS = "products.default.svc.cluster.local:8080/products/public/query?";
@@ -23,7 +23,7 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, $PROFILES.$user);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Unique-Id',md5(uniqid($PROFILES.$user.rand(),true))));
+	curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Unique-Id:'.md5(uniqid($PROFILES.$user.rand(),true))));
 	$profile = curl_exec($curl);
 	$http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 	curl_close($curl);
@@ -31,11 +31,14 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	$profile = json_decode($profile,true);
 	
 	if(count($profile) == 0) {
+	
 		if($http_status == 200) {
 			$http_status = 404;
 		}
+		
 		return $response
 				->withStatus($http_status)
+				->withHeader('X-Unique-Id',$uniqueId)
 				->withHeader('Content-Type', 'application/json;charset=utf-8')
 				->write('User not found');
 	}
@@ -53,19 +56,16 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, $PRODUCTS.$query);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Unique-Id',md5(uniqid($PRODUCTS.$query.rand(),true))));
+	curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Unique-Id:'.md5(uniqid($PRODUCTS.$query.rand(),true))));
 	$products = curl_exec($curl);
 
 	$http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 	curl_close($curl);
 		
-	if(isset($uniqueId) && !empty($uniqueId)) {
-		$response->withHeader('X-Unique-Id',$uniqueid);
-	}
-		
 	return $response->write($products)
 		            ->withStatus($http_status)
+		            ->withHeader('X-Unique-Id',$uniqueId)
      	            ->withHeader('Content-Type', 'application/json;charset=utf-8');
 	
 });
