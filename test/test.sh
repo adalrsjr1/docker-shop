@@ -13,7 +13,7 @@ run() {
 		v=$(echo $(($RANDOM % 10 + 1)))
 		u="Usuario"
 		echo $u$v
-		curl -i -X GET "192.168.201.254:8110/frontend/public/products?user=Usuario"$(echo $v)
+		curl -i --header "X-Unique-Id: $(echo -n $RANDOM | md5sum | awk '{print$1}')" -X GET "192.168.201.254:8110/frontend/public/products?user=Usuario"$(echo $v)
 	done
 }
 

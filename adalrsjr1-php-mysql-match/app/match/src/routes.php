@@ -2,6 +2,11 @@
 // Routes
 
 $app->get('/login/{user}', function ($request, $response, $args) {
+	$uniqueId = '';
+	if ($request->hasHeader('X-Unique-Id')) {
+			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+	}
+
 	$PRODUCTS = "products.default.svc.cluster.local:8080/products/public/query?";
 	$PROFILES = "profiles.default.svc.cluster.local:8090/profiles/public/user/";
 	if(gethostname() == 'linux-vm') {
@@ -47,11 +52,16 @@ $app->get('/login/{user}', function ($request, $response, $args) {
 	$curl = curl_init();
 	curl_setopt($curl, CURLOPT_URL, $PRODUCTS.$query);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Unique-Id',md5(uniqid($PRODUCTS.$query.rand(),true))));
 	$products = curl_exec($curl);
 
 	$http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 	curl_close($curl);
+		
+	if(isset($uniqueId) && !empty($uniqueId)) {
+		$response->withHeader('X-Unique-Id',$uniqueid);
+	}
 		
 	return $response->write($products)
 		            ->withStatus($http_status)

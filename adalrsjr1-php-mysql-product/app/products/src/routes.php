@@ -45,6 +45,10 @@ $db ='[{"calcado":{"preco":29,"tamanho":38,"cor":"cinza","tipo":"pantufa","marca
 });*/
 
 $app->get('/products/[{product}]', function ($request, $response, $args) use($db) {
+	$uniqueId = '';
+	if ($request->hasHeader('X-Unique-Id')) {
+			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+	}
 	if(gethostname() == 'linux-vm') {
 		$this->logger->addInfo("deployed at localhost");
 	}
@@ -75,11 +79,19 @@ $app->get('/products/[{product}]', function ($request, $response, $args) use($db
 		}
 	}
 	
+	if(isset($uniqueId) && !empty($uniqueId)) {
+		$response->withHeader('X-Unique-Id',$uniqueid);
+	}
+	
 	return $response->write(json_encode($selected))
      	               ->withHeader('Content-Type', 'application/json;charset=utf-8');	
 });
 
 $app->get('/color/{color}', function ($request, $response, $args) use($db) {
+	$uniqueId = '';
+	if ($request->hasHeader('X-Unique-Id')) {
+			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+	}
 	if(gethostname() == 'linux-vm') {
 		$this->logger->addInfo("deployed at localhost");
 	}
@@ -103,11 +115,20 @@ $app->get('/color/{color}', function ($request, $response, $args) use($db) {
 		}
 	}
 	
+	if(isset($uniqueId) && !empty($uniqueId)) {
+		$response->withHeader('X-Unique-Id',$uniqueid);
+	}
+	
 	return $response->write(json_encode($selected))
      	               ->withHeader('Content-Type', 'application/json;charset=utf-8');
 });
 
 $app->get('/price/{price}', function ($request, $response, $args) use($db) {
+	$uniqueId = '';
+	if ($request->hasHeader('X-Unique-Id')) {
+			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+	}
+	
 	if(gethostname() == 'linux-vm') {
 		$this->logger->addInfo("deployed at localhost");
 	}
@@ -132,11 +153,23 @@ $app->get('/price/{price}', function ($request, $response, $args) use($db) {
 		}
 	}
 	
+	if(isset($uniqueId) && !empty($uniqueId)) {
+		$response->withHeader('X-Unique-Id',$uniqueid);
+	}
+	
+	if(isset($uniqueId) && !empty($uniqueId)) {
+		$response->withHeader('X-Unique-Id',$uniqueid);
+	}
+	
 	return $response->write(json_encode($selected))
      	               ->withHeader('Content-Type', 'application/json;charset=utf-8');
 });
 
 $app->get('/query', function($request, $response, $args) use($db) {
+	$uniqueId = '';
+	if ($request->hasHeader('X-Unique-Id')) {
+			$uniqueid = $request->getHeaderLine('X-Unique-Id');
+	}
 	if(gethostname() == 'linux-vm') {
 		$this->logger->addInfo("deployed at localhost");
 	}
@@ -194,6 +227,10 @@ $app->get('/query', function($request, $response, $args) use($db) {
 						->withHeader('Content-Type', 'application/json;charset=utf-8')
 						->write('{"Type not found"}');
 	}
+	if(isset($uniqueId) && !empty($uniqueId)) {
+		$response->withHeader('X-Unique-Id',$uniqueid);
+	}
+	
 	return $response->write(json_encode($selected))
      	                ->withHeader('Content-Type', 'application/json;charset=utf-8');
 	
