@@ -3,10 +3,26 @@
   path /home/adalrsjr1/system.trace
   pos_file /var/log/td-agent/system.trace.pos
   tag trace.log.zmq
-  format /(?<timestamp>[0-9.]+)T((?<req_host_src>([0-9.]{4}){3}[0-9]{3}).(?<req_port_src>[0-9]+).(?<req_host_dst>([0-9.]{4}){3}[0-9]{3}).(?<req_port_dst>[0-9]+). (?<req_method>(GET|POST|DELETE|UPDATE)) (?<request>.*)(?<req_protocol>HTTP.1.[1.2]+)|(?<res_host_src>([0-9.]{4}){3}[0-9]{3}).(?<res_port_src>[0-9]+).(?<res_host_dst>([0-9.]{4}){3}[0-9]{3}).(?<res_port_dst>[0-9]+). (?<res_protocol>HTTP.1.[12]+) (?<response>[0-9]{3}) (?<res_message>[a-zA-Z]*))$/
+  format /(?<timestamp>[0-9.]+)T((?<req_host_src>([0-9.]{4}){3}[0-9]{3}).(?<req_port_src>[0-9]+).(?<req_host_dst>([0-9.]{4}){3}[0-9]{3}).(?<req_port_dst>[0-9]+). (?<req_method>(GET|POST|DELETE|PUT)) (?<request>.*)(?<req_protocol>HTTP.1.[1.2]+)|(?<res_host_src>([0-9.]{4}){3}[0-9]{3}).(?<res_port_src>[0-9]+).(?<res_host_dst>([0-9.]{4}){3}[0-9]{3}).(?<res_port_dst>[0-9]+). (?<res_protocol>HTTP.1.[12]+) (?<response>[0-9]{3}) (?<res_message>[a-zA-Z]*))$/
   time_key @timestamp
   time_format %s
 </source>
+
+<source>
+  @type tail
+  path /home/adalrsjr1/system.trace2
+  pos_file /var/log/td-agent/system.trace.pos2
+  tag trace.log.zmq2
+  format multiline
+  format_firstline /^[# ]+/
+  format1 /(.*(?<timestamp>[0-9]{10}T)(?<host_src>([0-9]{3}.){3}[0-9]{3}).(?<port_src>[0-9]{5})-(?<host_dst>([0-9]{3}.){3}[0-9]{3}).(?<port_dst>[0-9]{5}):([ ]+(?<action>GET|POST|PUT|DELETE)[ ]+(?<request>.*[ ]+)(?<req_protocol>HTTP.1.[0-2]+)|[ ]+(?<res_protocol>HTTP.1.[0-2]) (?<response>[0-9]{3}) (?<res_msg>[a-zA-Z]*)).*X-Unique-Id:[ ]*(?<uuid>[a-z0-9]{32}))/
+  time_key @timestamp
+  time_format %s
+</source>
+
+<match trace.log.zmq2>
+  type stdout
+</match>
 
 <source>
   type zmq_sub
@@ -26,4 +42,3 @@
 <match trace.**>
   type stdout
 </match>
-
