@@ -1,7 +1,7 @@
 #!/bin/bash
 
-KUBECTL='/usr/local/home/kubernetes/cluster/kubectl.sh'
-KUBELETE='/usr/local/home/kubernetes/hack/local-up-cluster.sh'
+KUBECTL='/usr/local/kubernetes/cluster/kubectl.sh'
+KUBELETE='/usr/local/kubernetes/hack/local-up-cluster.sh'
 
 run () {
 
